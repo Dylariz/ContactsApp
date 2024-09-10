@@ -1,0 +1,3 @@
+###@ContactsApp_HostAddress = http://localhost:5016
+###GET {{ContactsApp_HostAddress}}/weatherforecast/
+###Accept: application/json
