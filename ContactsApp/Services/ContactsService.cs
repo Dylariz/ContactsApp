@@ -37,6 +37,22 @@ public class ContactsService : IContactsService
         await db.Contacts.AddAsync(newContact, httpContextRequestAborted);
         await db.SaveChangesAsync(httpContextRequestAborted);
     }
+    
+    public async Task RemoveContactAsync(string sessionToken, int contactId, CancellationToken httpContextRequestAborted)
+    {
+        if (await _auth.SessionIsValid(sessionToken) == false)
+            throw new ArgumentException("Invalid session token");
+
+        var db = DBUtils.GetContext();
+        var session = await db.Sessions.Include(session => session.User).FirstOrDefaultAsync(x => x.Token == sessionToken, httpContextRequestAborted);
+
+        var contact = await db.Contacts.FirstOrDefaultAsync(x => x.UserId == session!.UserId && x.FamiliarId == contactId, httpContextRequestAborted);
+        if (contact == null)
+            throw new ArgumentException("Contact not found");
+
+        db.Contacts.Remove(contact);
+        await db.SaveChangesAsync(httpContextRequestAborted);
+    }
 
     public async Task<IEnumerable<Profile>> GetUserContactsFullAsync(string sessionToken,
         CancellationToken cancellationToken)

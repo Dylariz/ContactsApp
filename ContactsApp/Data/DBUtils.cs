@@ -14,35 +14,26 @@ public static class DBUtils
     }
     
     /// <summary>
-    /// Prepares the database to work with the application
+    /// Prepares the database to work with the application, reset default tables
     /// </summary>
     public static void PrepareDatabase()
     {
         using var db = GetContext();
-        if (db.Database.EnsureCreated())
+        
+        if (!db.Database.EnsureCreated())
         {
-            InitDatabase(db);
-        }
-        else
-        {
+            // Delete constants and temporary data
+            db.Genders.RemoveRange(db.Genders);
             db.Sessions.RemoveRange(db.Sessions);
+            
+            // Reset autoincrement of removed tables
+            db.Database.ExecuteSqlRaw("DELETE FROM sqlite_sequence WHERE name = 'Genders' OR name = 'Sessions'");
         }
+        
+        // Set default data
+        var appConfig = AppConfig.GetInstance();
+        db.Genders.AddRange(appConfig.Genders.Select(x => new Gender {Type = x}));
         
         db.SaveChanges();
-    }
-    
-    /// <summary>
-    /// Initializes the database with default values
-    /// </summary>
-    private static void InitDatabase(ApplicantionContext context)
-    {
-        List<Gender> defaultGenders =
-        [
-            new Gender { Type = "Male" },
-            new Gender { Type = "Female" },
-            new Gender { Type = "Helicopter" }
-        ];
-        
-        context.Genders.AddRange(defaultGenders);
     }
 }

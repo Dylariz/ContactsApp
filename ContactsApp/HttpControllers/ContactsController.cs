@@ -27,6 +27,20 @@ public class ContactsController : ControllerBase
         }
     }
     
+    [HttpPost("remove")]
+    public async Task<IActionResult> RemoveContact(string sessionToken, int contactId)
+    {
+        try
+        {
+            await _service.RemoveContactAsync(sessionToken, contactId, HttpContext.RequestAborted);
+            return Ok();
+        }
+        catch (ArgumentException ex)
+        {
+            return NotFound(ex.Message);
+        }
+    }
+    
     [HttpGet("full")]
     [ProducesResponseType(typeof(IEnumerable<Profile>), 200)]
     public async Task<IActionResult> GetUserContactsFull(string sessionToken)

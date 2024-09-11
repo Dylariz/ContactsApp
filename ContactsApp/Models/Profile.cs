@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace ContactsApp.Models;
+﻿namespace ContactsApp.Models;
 
 public class Profile
 {

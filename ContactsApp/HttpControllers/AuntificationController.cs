@@ -50,7 +50,7 @@ public class AuntificationController : ControllerBase
         }
         catch (ArgumentException ex)
         {
-            return RedirectToAction("Login", new {message = ex.Message});
+            return BadRequest(ex.Message);
         }
     }
 }

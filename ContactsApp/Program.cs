@@ -29,9 +29,9 @@ services.ConfigureSwaggerGen(options =>
         Version = "v1",
         Title = "ContactsApp API",
         Description = "ASP.NET Core API of the ContactsApp project",
-        Contact = new OpenApiContact { Name = "ITAM", Url = new Uri("https://github.com/dylariz") },
+        Contact = new OpenApiContact { Name = "Github", Url = new Uri("https://github.com/dylariz") },
         License = new OpenApiLicense
-            { Name = "MIT License", Url = new Uri("https://github.com/dylariz/ContactsApp/blob/main/LICENSE") }
+            { Name = "MIT License", Url = new Uri("https://github.com/Dylariz/ContactsApp/blob/master/LICENSE") }
     });
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
